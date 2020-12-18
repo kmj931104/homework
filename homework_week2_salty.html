@@ -1,0 +1,279 @@
+<html lang="ko">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <title>2주차 숙제 짭짤한 맛 | 노래하는 새와 뱀의 발라드</title>
+
+        <style>
+            /*.font1 {*/
+            /*    font-family: 'Yeon Sung', cursive;*/
+            /*    font-size: 15pt;*/
+            /*}*/
+
+            .font2 {
+                font-family: 'Noto Sans KR', sans-serif;
+            }
+
+            .font3 {
+                font-family: 'Black Han Sans', sans-serif;
+                font-size: 40pt;
+            }
+
+            .font4 {
+                font-family: 'Nanum Gothic', sans-serif;
+            }
+
+            .font5 {
+                font-family: 'Noto Sans KR', sans-serif;
+            }
+
+            .item-box {
+                background-image: url("https://post-phinf.pstatic.net/MjAyMDA5MDFfMTg3/MDAxNTk4OTcyMTQ0NzY5.in-2JZYhbPve1UrzQemiRb1RlZUoIAILGQL1mV3vLpEg.dgeOf0XooNTOf0m8QjMWXKVOBhINfvFK0F2FpiubAqMg.JPEG/800x0.jpg?type=w1200");
+                width: 400px;
+                height: 550px;
+                background-size: contain;
+                background-position: center;
+                margin-top: 20px;
+                margin-left: 200px;
+                margin-bottom: 40px;
+            }
+
+            .wrap {
+                width: 800px;
+                height: 1300px;
+                margin: 0 auto;
+            }
+
+            .order-box {
+                width: 300px;
+                margin: 0 auto;
+            }
+
+            .address-box {
+                width: 500px;
+                margin-left: -95px;
+            }
+
+            .phonenumber-box {
+                width: 400px;
+                margin-left: -45px;
+            }
+
+            .order-button {
+                width: 200px;
+                margin: 0 auto;
+            }
+
+
+        </style>
+
+        <script>
+            $(document).ready(function () {
+                $('#rate-info').empty();
+                exchangeRate();
+                $('#orders').empty();
+            })
+
+            let numIndex = 0;
+            function submit() {
+
+                let name = $('#name').val();
+                let amount = $('#amount').val();
+                let address = $('#address').val();
+                let phonenumber = $('#phonenumber').val();
+
+                if (name === '' || amount === '' || address === '' || phonenumber === '') {
+                    alert('주문자 정보를 모두 입력해주세요');
+                } else {
+                    numIndex += 1;
+
+                    let tempOrder = `<tr>
+                                        <th scope="row">${numIndex}</th>
+                                        <td>${name}</td>
+                                        <td>${amount}개</td>
+                                        <td>${address}</td>
+                                        <td>${phonenumber}</td>
+                                     </tr>`;
+
+
+                $('#orders').append(tempOrder);
+
+                }
+            }
+
+            function exchangeRate() {
+                $.ajax({
+                    type: "Get",
+                    url: "https://api.manana.kr/exchange/rate.json",
+                    data: {},
+                    success: function (response) {
+                        let rateInfos = response[1];
+                        let rateValue = rateInfos['rate'];
+
+                        let tempHtml = `<div id="rate-info">달러-원 환율 : <span id="rate">${rateValue}</span></div>`;
+                        $('#rate-info').append(tempHtml);
+                    }
+                })
+            }
+
+            let count = 0;
+
+            function calculate() {
+                count += 1;
+                $.ajax({
+                    type: "Get",
+                    url: "https://api.manana.kr/exchange/rate.json",
+                    data: {},
+                    success: function (response) {
+                        let rateInfos = response[1];
+                        let rateValue = rateInfos['rate'];
+                        let calCost = 14400 / rateValue;
+                        let calCostArrange = calCost.toFixed(2);
+
+                        let caltemp = `<h4
+                    style="display: inline" class="font5">가격: <span id="cost">${calCostArrange}달러</span> / 개</h4>`;
+
+                       let origin = `<h4
+                    style="display: inline" class="font5" id="cost">가격: 14,400원 / 개</h4>`;
+
+                        $('#cost').empty();
+
+                        if (count % 2 == 1) {
+                            $('#cost').append(caltemp);
+                        } else {
+                            $('#cost').append(origin);
+
+                        }
+
+
+                    }
+                })
+
+            }
+
+        </script>
+    </head>
+
+    <body class="wrap">
+        <div class="item-box">
+        </div>
+        <div>
+            <h1 style="display:inline" class="font3">노래하는 새와 뱀의 발라드</h1> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <h4
+                    style="display: inline" class="font5" id="cost">가격: 14,400원 / 개</h4><br><br>
+            <p class="font4">
+                인간의 가장 사악한 충동을 영리하게 스포츠 행사로 포장한 헝거 게임.<br>
+                누군가에게는 생존, 다른 누군가에게는 엔터테인먼트!<br>
+                헝거 게임 트릴로지 세계관의 완성 『노래하는 새와 뱀의 발라드』<br><br>
+                매년 12개 각 구역에서 두 명씩, 총 24명의 십 대 소년 소녀들을 뽑아 거대한 경기장에 몰아넣고 마지막 단 한 명이 살아남을 때까지 서로를 죽여야만 하는 헝거 게임.
+            </p><br>
+        </div>
+        <div class="font2">
+            <h2>주문하기</h2>
+
+            <div id="rate-info">달러-원 환율 : <span id="rate">환율정보</span></div>
+            <button type="button" class="btn btn-info btn-sm" onclick="calculate()">환율정보 계산하기</button>
+
+        </div>
+        <div class="order-box">
+            <div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">주문자 성함</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="name" id="name">
+                </div>
+            </div>
+            <div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="amount">수량</label>
+                    </div>
+                    <select class="custom-select" id="amount">
+                        <option selected>수량을 선택하세요</option>
+                        <option value="1">1개</option>
+                        <option value="2">2개</option>
+                        <option value="3">3개</option>
+                        <option value="4">4개</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="input-group mb-3 address-box">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">주소</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="address" id="address">
+                </div>
+            </div>
+            <div>
+                <div class="input-group mb-3 phonenumber-box">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">전화번호</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="phonenumber"
+                           id="phonenumber">
+                </div>
+            </div>
+        </div>
+        </div>
+        <br>
+        <button type="button" class="btn btn-dark btn-block order-button" onclick="submit()">주문하기</button>
+        </div>
+        <br>
+        <br>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">주문자 성함</th>
+                    <th scope="col">수량</th>
+                    <th scope="col">주소</th>
+                    <th scope="col">전화번호</th>
+                </tr>
+                </thead>
+                <tbody id="orders">
+                <tr>
+                    <th scope="row">1</th>
+                    <td>홍길동</td>
+                    <td>3개</td>
+                    <td>서울특별시 서대문구 대현동11-1 이화여자대학교</td>
+                    <td>02-3277-4145</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
